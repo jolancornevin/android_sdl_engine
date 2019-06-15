@@ -5,20 +5,18 @@
 
 #define SDL_MAIN_HANDLED
 
-
-static const int WINDOW_WIDTH = 640, WINDOW_HEIGHT = 360;
-
 static const int TARGET_FPS = 60;
 
 // Max time we want to have between frames (in ms).
 static const int MAX_FRAME_TIME = 1000 / TARGET_FPS;
 
 int main(int argc, char *argv[]) {
+    Game game = Game();
+
+    game.init("Super game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE );
+
     uint32_t tickStart;
     int currentFrameTime;
-
-    Game game = Game();
-    game.init("Super game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, false);
 
     while(game.running()) {
         // Ticks since we've first initialized the SDL for FPS.
@@ -41,3 +39,5 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+// __android_log_print(ANDROID_LOG_ERROR, "TRACKERS", "%f", event.tfinger.x);
