@@ -8,6 +8,7 @@
 class Character {
 public:
     Character() {}
+
     ~Character() {}
 
     void init(SDL_Renderer *renderer, std::string path, const int width, const int height) {
@@ -29,14 +30,15 @@ public:
     }
 
     void render(SDL_Renderer *renderer) {
-        SDL_Rect posRect = { this->x, this->y, this->width, this->height };
-         // show the player image.
-         SDL_RenderCopy(renderer, playerTexture, nullptr, &posRect);
+        SDL_Rect posRect = {this->x, this->y, this->width, this->height};
+        // show the player image.
+        SDL_RenderCopy(renderer, playerTexture, nullptr, &posRect);
     }
 
     void clean() {
         SDL_DestroyTexture(playerTexture);
     }
+
 private:
     SDL_Texture *playerTexture;
 

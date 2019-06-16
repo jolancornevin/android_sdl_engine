@@ -1,6 +1,5 @@
 #include <SDL.h>
 #include <SDL_image.h>
-#include <android/log.h>
 
 #include <stdio.h>
 #include <string>
@@ -11,10 +10,11 @@
 
 class Game {
 public:
-    Game() {}
-    ~Game() {}
+    Game() = default;
 
-    int init(const char* title, int xpos, int ypos, bool fullscreen) {
+    ~Game() = default;
+
+    int init(const char *title, int xpos, int ypos, bool fullscreen) {
         isRunning = true;
 
         SDL_DisplayMode DM;
@@ -23,21 +23,21 @@ public:
         this->height = DM.h;
 
         if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-            SDL_Log( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+            SDL_Log("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
             isRunning = false;
             return -1;
         }
 
         window = SDL_CreateWindow(title, xpos, ypos, 360, 640, SDL_WINDOW_ALLOW_HIGHDPI);
         if (window == nullptr) {
-            SDL_Log( "Could not create window:  %s\n", SDL_GetError() );
+            SDL_Log("Could not create window:  %s\n", SDL_GetError());
             isRunning = false;
             return -1;
         }
 
         renderer = SDL_CreateRenderer(window, -1, 0);
         if (renderer == nullptr) {
-            SDL_Log( "Could not create renderer: %s\n", SDL_GetError() );
+            SDL_Log("Could not create renderer: %s\n", SDL_GetError());
             isRunning = false;
             return -1;
         }
@@ -45,7 +45,6 @@ public:
         // Get the actual width and height of the screen.
         SDL_GetWindowSize(window, &this->width, &this->height);
 
-        // Create a character.
         this->c.init(renderer, "main/hello_world.bmp", 256, 256);
 
         return EXIT_SUCCESS;
@@ -54,7 +53,7 @@ public:
     /**
     * Handle any event that might occurs in the application.
     */
-    void handleEvents()  {
+    void handleEvents() {
         SDL_Event event;
 
         // Multiples event can have occurred since the last call. We de-pile them all with the while
@@ -66,13 +65,13 @@ public:
                 case SDL_FINGERDOWN:
                     // event.tfinger.x and y are normalized, so we have to multiple them by the screen size to get the real pos.
                     this->c.updatePos(
-                        event.tfinger.x * this->width,
-                        event.tfinger.y * this->height);
+                            event.tfinger.x * this->width,
+                            event.tfinger.y * this->height);
                     break;
                 case SDL_FINGERMOTION:
                     this->c.updatePos(
-                        event.tfinger.x * this->width,
-                        event.tfinger.y * this->height);
+                            event.tfinger.x * this->width,
+                            event.tfinger.y * this->height);
                     break;
                 case SDL_FINGERUP:
                     break;
@@ -81,6 +80,7 @@ public:
             }
         }
     }
+
     void update() {}
 
     /**
@@ -105,16 +105,17 @@ public:
 
         SDL_Quit();
     }
+
     bool running() { return isRunning; };
 private:
-    bool isRunning;
+    bool isRunning{};
 
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    SDL_Texture *playerTexture;
+    SDL_Window *window{};
+    SDL_Renderer *renderer{};
+    SDL_Texture *playerTexture{};
 
-    int width;
-    int height;
+    int width{};
+    int height{};
 
     Character c;
 };

@@ -6,7 +6,6 @@
 #define SDL_MAIN_HANDLED
 
 static const int TARGET_FPS = 60;
-
 // Max time we want to have between frames (in ms).
 static const int MAX_FRAME_TIME = 1000 / TARGET_FPS;
 
@@ -40,4 +39,5 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
+// #include <android/log.h>
 // __android_log_print(ANDROID_LOG_ERROR, "TRACKERS", "%f", event.tfinger.x);
