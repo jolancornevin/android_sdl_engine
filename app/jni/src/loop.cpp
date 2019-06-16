@@ -5,6 +5,8 @@
 
 #define SDL_MAIN_HANDLED
 
+const bool IS_MOBILE = true;
+
 static const int TARGET_FPS = 60;
 // Max time we want to have between frames (in ms).
 static const int MAX_FRAME_TIME = 1000 / TARGET_FPS;

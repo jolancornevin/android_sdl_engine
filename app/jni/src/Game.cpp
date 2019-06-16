@@ -7,6 +7,7 @@
 
 #include "Character.cpp"
 
+extern const bool IS_MOBILE;
 
 class Game {
 public:
@@ -45,7 +46,14 @@ public:
         // Get the actual width and height of the screen.
         SDL_GetWindowSize(window, &this->width, &this->height);
 
-        this->c.init(renderer, "main/hello_world.bmp", 256, 256);
+        std::string path = "";
+        if (IS_MOBILE) {
+            path = "main/hello_world.bmp";
+        } else {
+            path = "D:\\Documents\\Dev\\Project\\sdl_intro\\main\\hello_world.bmp";
+        }
+        // Create a character.
+        this->c.init(renderer, path, 256, 256);
 
         return EXIT_SUCCESS;
     }
