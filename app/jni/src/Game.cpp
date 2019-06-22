@@ -1,59 +1,29 @@
-#include <SDL.h>
-#include <SDL_image.h>
+#ifndef GAME_CPP
+#define GAME_CPP
 
 #include <stdio.h>
 #include <string>
 #include <string.h>
 
+#include <SDL.h>
+#include <SDL_image.h>
+
 #include "Character.cpp"
+#include "utils/PP.cpp"
+#include "phygine/Fireworks.cpp"
 
 extern const bool IS_MOBILE;
 
 class Game {
 public:
     Game() = default;
-
     ~Game() = default;
 
-    int init(const char *title, int xpos, int ypos, bool fullscreen) {
+    int init(const char *title, int xpos, int ypos) {
         isRunning = true;
 
-        SDL_DisplayMode DM;
-        SDL_GetCurrentDisplayMode(0, &DM);
-        this->width = DM.w;
-        this->height = DM.h;
-
-        if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-            SDL_Log("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-            isRunning = false;
-            return -1;
-        }
-
-        window = SDL_CreateWindow(title, xpos, ypos, 360, 640, SDL_WINDOW_ALLOW_HIGHDPI);
-        if (window == nullptr) {
-            SDL_Log("Could not create window:  %s\n", SDL_GetError());
-            isRunning = false;
-            return -1;
-        }
-
-        renderer = SDL_CreateRenderer(window, -1, 0);
-        if (renderer == nullptr) {
-            SDL_Log("Could not create renderer: %s\n", SDL_GetError());
-            isRunning = false;
-            return -1;
-        }
-
-        // Get the actual width and height of the screen.
-        SDL_GetWindowSize(window, &this->width, &this->height);
-
-        std::string path = "";
-        if (IS_MOBILE) {
-            path = "main/hello_world.bmp";
-        } else {
-            path = "D:\\Documents\\Dev\\Project\\sdl_intro\\main\\hello_world.bmp";
-        }
-        // Create a character.
-        this->c.init(renderer, path, 256, 256);
+        PP &pp = PP::getInstance();
+        pp.init("Super game", xpos, ypos);
 
         return EXIT_SUCCESS;
     }
@@ -63,9 +33,10 @@ public:
     */
     void handleEvents() {
         SDL_Event event;
+        PP &pp = PP::getInstance();
 
         // Multiples event can have occurred since the last call. We de-pile them all with the while
-        while (SDL_PollEvent(&event)) {
+        while (pp.getEvents(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
                     isRunning = false;
@@ -89,41 +60,39 @@ public:
         }
     }
 
-    void update() {}
+    /**
+     * Update the elment of the games.
+     *
+     * @param lastFrameDuration: time elapsed in ms.
+     */
+    void update(float lastFrameDuration) {
+        this->fireworkHandler.update(lastFrameDuration);
+    }
 
     /**
     * Render the game and every objects in it.
     */
-    void render() {
-        SDL_RenderClear(renderer);
-
-        this->c.render(renderer);
-
-        SDL_RenderPresent(renderer);
+    void _render(SDL_Renderer* renderer) {
+        // this->c.render(renderer);
+        this->fireworkHandler.display(renderer);
     }
 
-    /**
-    * Clean the SDL and any objects.
-    */
+    void render() {
+        PP &pp = PP::getInstance();
+        pp.render(this, &Game::_render);
+    }
+
     void clean() {
-        SDL_DestroyWindow(window);
-        SDL_DestroyRenderer(renderer);
-
-        this->c.clean();
-
-        SDL_Quit();
+        // this->c.clean();
+        PP &pp = PP::getInstance();
+        pp.clean();
     }
 
     bool running() { return isRunning; };
+
 private:
     bool isRunning{};
-
-    SDL_Window *window{};
-    SDL_Renderer *renderer{};
-    SDL_Texture *playerTexture{};
-
-    int width{};
-    int height{};
-
-    Character c;
+    FireworksDemo fireworkHandler;
 };
+
+#endif // GAME_CPP
