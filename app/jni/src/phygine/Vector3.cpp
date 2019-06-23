@@ -1,6 +1,8 @@
 #ifndef PHYGINE_VECTOR3_H
 #define PHYGINE_VECTOR3_H
 
+#include "precision.cpp"
+
 namespace phygine {
     class Vector3 {
     private:
