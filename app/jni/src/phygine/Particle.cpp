@@ -45,6 +45,14 @@ namespace phygine {
             this->inverseMass = inverseMass;
         }
 
+        void addForce(const Vector3 &force) {
+            forceAccum += force;
+        }
+
+        void clearAccumulator() {
+            forceAccum.clear();
+        }
+
         /**
          * Integrates the particle forward in time by the given amount.
          * This function uses a Newton-Euler integration method, which is a linear approximation of the correct integral.
@@ -74,6 +82,8 @@ namespace phygine {
             // Impose drag.
             velocity *= real_pow(damping, duration);
 //            std::cout << " vel " << velocity << std::endl;
+
+            clearAccumulator();
         }
 
     protected:
