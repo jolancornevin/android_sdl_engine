@@ -1,3 +1,6 @@
+#ifndef PHYGINE_PARTICLE
+#define PHYGINE_PARTICLE
+
 #include <assert.h>
 
 #include "Vector3.cpp"
@@ -85,3 +88,5 @@ namespace phygine {
         real inverseMass;
     };
 }
+
+#endif // PHYGINE_PARTICLE
